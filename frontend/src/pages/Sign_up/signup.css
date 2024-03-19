@@ -1,0 +1,25 @@
+.signupMainContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100svh;
+    width: 100svw;
+}
+
+.signupPanel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem;
+    border: 1px solid black;
+    gap: 1rem;
+    
+
+}
+
+.signupForm{
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+    gap: 2rem;
+}

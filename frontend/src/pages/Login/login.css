@@ -1,26 +1,27 @@
-.loginMainContainer{
+.loginMainContainer {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100svh;
-    width: 100svw;
-}
-
-.loginPanel{
+    min-height: 100svh; 
+    min-width: 100svw; 
+    background-image: url('../../img/sincerely-media-_4IGEPY0kZU-unsplash.jpg'); /* Adjust the path to match the location of your image */
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .loginPanel {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 3rem;
     border: 1px solid black;
     gap: 1rem;
-    
-
-}
-
-.loginForm{
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .loginForm {
     display: grid;
     grid-template-columns: 0.5fr 1fr;
     gap: 2rem;
-    /* width: 30svw; */
-}
+  }
+  
