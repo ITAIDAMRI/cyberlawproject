@@ -10,7 +10,7 @@ const TextEditor = () => {
 
   const mainContainerStyle = {
     all: "unset",
-    width: "100vw",
+    height: "95%"
   };
 
   const editorStyle = {
@@ -101,13 +101,7 @@ const TextEditor = () => {
     setTitleInput(event.target.value);
   };
 
-  
-  const FillForm = ()=> {
-    let textformField = {fieldName: 'Name', value: 'Marko Doe'};
-    let fieldInfo = documentContainerRef.current.documentEditor.getFormFieldInfo('Name');
-    console.log(fieldInfo)
-    documentContainerRef.current.documentEditor.importFormData([textformField]);
-  };
+
   
   return (
     <Container style={mainContainerStyle} className="d-flex justify-content-center align-items-center">
@@ -133,7 +127,6 @@ const TextEditor = () => {
           <p/>
           <Button onClick={saveAsDocx} style={{marginRight: '10px'}}>Save</Button>
           <Button onClick={fetchDocument}>Fetch</Button>
-          <Button onClick={FillForm}>FillForm</Button>
         </Card.Body>
       </Card>
     </Container>

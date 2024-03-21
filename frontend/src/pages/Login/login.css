@@ -4,7 +4,7 @@
     align-items: center;
     min-height: 100svh; 
     min-width: 100svw; 
-    background-image: url('../../img/sincerely-media-_4IGEPY0kZU-unsplash.jpg'); /* Adjust the path to match the location of your image */
+    background-image: url('../../img/cool-background.png'); /* Adjust the path to match the location of your image */
     background-size: cover;
     background-position: center;
   }
