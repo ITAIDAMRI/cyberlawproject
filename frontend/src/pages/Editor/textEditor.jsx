@@ -53,7 +53,7 @@ const TextEditor = () => {
 
     const documentData = documentContainerRef.current.documentEditor.serialize();
     try {
-      const response = await fetch('http://localhost:5000/api/documents/saveDocument', {
+      const response = await fetch('http://localhost:5000/api/documents/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -70,6 +70,28 @@ const TextEditor = () => {
     }
   };
   
+
+  const createDocument = async () => {
+    const documentData = documentContainerRef.current.documentEditor.serialize();
+    try {
+      const response = await fetch('http://localhost:5000/documents/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ Data: documentData, title: "NEW TITLE", author:"Itai Damri" }),
+      });
+      if (response.ok) {
+        console.log('Document saved successfully!');
+      } else {
+        console.error('Failed to save document:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error saving document:', error);
+    }
+  }
+
+
   const fetchDocument = async () => {
     if (!selectedDocument) {
       console.error('No document selected')
@@ -78,7 +100,7 @@ const TextEditor = () => {
     } else setError(null)
 
     try {
-      const response = await fetch('http://localhost:5000/api/documents/fetchDocument', {
+      const response = await fetch('http://localhost:5000/documents/fetchDocument', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,9 +129,8 @@ const TextEditor = () => {
     <Container style={mainContainerStyle} className="d-flex justify-content-center align-items-center">
       <Card style={{ height: "100vh", width: "100%" }} bg="primary" text="black">
         <Card.Body>
-          <DocumentEditorContainerComponent height="82vh" width="95%" id="container" style={editorStyle} ref={documentContainerRef}>
-            <Inject services={[Toolbar, WordExport]} />
-          </DocumentEditorContainerComponent>
+          <button onClick={createDocument} >Create</button>
+         
           {error && <Alert variant="danger"  style={{width: '95%'}}>{error}</Alert>}
           <div className="d-flex justify-content-center align-items-center">
             <Dropdown onSelect={(eventKey) => setSelectedDocument(eventKey)} className="mr-2"  style={{marginTop: '10px'}}>
@@ -127,6 +148,9 @@ const TextEditor = () => {
           <p/>
           <Button onClick={saveAsDocx} style={{marginRight: '10px'}}>Save</Button>
           <Button onClick={fetchDocument}>Fetch</Button>
+          <DocumentEditorContainerComponent height="82vh" width="95%" id="container" style={editorStyle} ref={documentContainerRef}>
+            <Inject services={[Toolbar, WordExport]} />
+          </DocumentEditorContainerComponent>
         </Card.Body>
       </Card>
     </Container>

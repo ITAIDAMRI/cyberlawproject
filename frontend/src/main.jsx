@@ -15,7 +15,7 @@ import '../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
 import "../node_modules/@syncfusion/ej2-documenteditor/styles/material.css";
 
 
-registerLicense('Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCfUx0Q3xbf1x0ZFFMY1pbRnRPMyBoS35RckVgWHZedHdTRGJfVEd3');
+registerLicense('Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXxcdXVVRGJYWUd2Xks=');
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <MainProvider>
