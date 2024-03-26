@@ -1,30 +1,25 @@
 import { createContext, useReducer } from 'react'
+import localStorageService from '../util/localStorageService'
 
-// initial state
 const initialState = {
-  user: {
-    firstName: "Boris",
-    lastName: "Johnson",
-    email: "bSbQ0@example.com",
-  }
+  user :localStorageService.getUser()
 }
 
-// create context
 export const MainContext = createContext(initialState)
 
-// reducer
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER':
-      return { ...state, user: action.payload }
+        localStorageService.saveUser(action.payload)
+        return { ...state, user: action.payload }
     case 'LOGOUT':
+        localStorageService.removeUser()
         return { ...state, user: null }
     default:
-      return state
+        return state
   }
 }
 
-// provider component
 export const MainProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -32,13 +27,14 @@ export const MainProvider = ({ children }) => {
     dispatch({ type: 'SET_USER', payload: user })
   }
 
+
+
   const logout = () => {
     dispatch({ type: 'LOGOUT' })
   }
 
-  // make setUser and state available to the rest of the app
   return (
-    <MainContext.Provider value={{ ...state, setUser, logout }}>
+    <MainContext.Provider value={{ user: state ? state.user : state, setUser, logout }}>
       {children}
     </MainContext.Provider>
   )

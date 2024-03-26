@@ -1,22 +1,22 @@
 const express = require("express");
-const {
-	checkAuth,
-	logRequestMiddleware,
-	logResponseMiddleware,
-} = require("../middleware/sharedMiddleware");
-const {
-	createDocumentMiddleware,
-} = require("../middleware/documentMiddleware");
+const sharedMiddleware = require("../middleware/sharedMiddleware");
+const documentMiddleware = require("../middleware/documentMiddleware");
 
 const documentRouter = express.Router();
 
-documentRouter.post("/", 
-	logRequestMiddleware,
-	[
-		checkAuth,
-	],
-	createDocumentMiddleware,
-	logResponseMiddleware,
+documentRouter.post(
+	"/",
+	sharedMiddleware.logRequest,
+	[sharedMiddleware.checkAuth],
+	documentMiddleware.createDocument,
+	sharedMiddleware.logResponse
+);
+
+documentRouter.get(
+	"/",
+	sharedMiddleware.logRequest,
+	[sharedMiddleware.checkAuth, documentMiddleware.fetchDocumentList],
+	sharedMiddleware.logResponse
 );
 
 //returns document

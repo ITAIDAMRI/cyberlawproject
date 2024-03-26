@@ -1,17 +1,27 @@
 import './App.css'
 import Navbar from './components/Navbar'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { MainContext } from './context/mainContext';
 import Login from './pages/Login';
 import Documents from './pages/Documents';
 import EditorPage from './pages/Editor/editorPage';
+import { checkToken } from './api/auth';
 function App() {
   const {user} = useContext(MainContext)
 
-  const showBase = () => {
-    return user ? <>{showRoutes()}</> : <Login />
+  const onStartup = async () => {
+    if(user) {
+      const res =  await checkToken(user.token)
+      console.log('TOKEN RESULT', res)
+    }
   }
+
+  useEffect(() => {
+   onStartup() 
+  }, [])
+
+  
 
   const showRoutes = () => {
     return(
@@ -24,6 +34,10 @@ function App() {
         </Routes>
       </Router>
     )
+  }
+
+  const showBase = () => {
+    return user ? <>{showRoutes()}</> : <Login />
   }
 
   return (

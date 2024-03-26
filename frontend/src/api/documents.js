@@ -1,3 +1,40 @@
+import axios from "axios";
+
+import { SERVER_URL } from "./config";
+
+const BASE_URL = "/documents/";
+
+export const getUserDocuments = async (user) => {
+	const res = await axios.get(SERVER_URL + BASE_URL, {
+		params: {
+			user,
+		},
+		headers: {
+			Authorization: `Bearer ${user.token}`,
+		},
+	});
+
+	return res.data;
+};
+
+export const createDocument = async (title, documentData, user) => {
+	try {
+		const result = await axios.post(SERVER_URL + BASE_URL, {
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+			},
+			params: {
+				user,
+			},
+			title,
+			documentData,
+		});
+		return result.data;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 // const createDocument = async () => {
 //     const documentData = documentContainerRef.current.documentEditor.serialize();
 //     try {

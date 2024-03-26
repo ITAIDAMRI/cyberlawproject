@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const { connectDB } = require("./dbConnection/mongoDBConneciton.js");
 const app = express();
 const documentRouter = require("./routes/documentRouter");
+const userRouter = require("./routes/userRouter.js");
 
 app.use(cors());
 app.use(express.json());
@@ -16,27 +17,27 @@ dotenv.config();
 
 connectDB();
 
-// app.use("/users", usersRouter);
+app.use("/users", userRouter);
 app.use("/documents", documentRouter);
 
 app.use((err, req, res, next) => {
 	console.log(`[ERROR ON REQUEST]\t`, err);
-	let message = "Internal Server Error";
-	let statusCode = 404;
-	if (err.errors && err.errors[0]) {
-		message = err.errors[0].msg;
-		statusCode = 400;
-	} else if (err[0]) {
-		message = err[0].msg;
-		statusCode = 400;
-	} else if (err.message) {
-		message = err.message;
-		statusCode = 400;
-	} else {
-		message = err;
-		statusCode = 400;
-	}
-	res.status(statusCode).json({ message });
+	// let message = "Internal Server Error";
+	// let statusCode = 404;
+	// if (err.errors && err.errors[0]) {
+	// 	message = err.errors[0].msg;
+	// 	statusCode = 400;
+	// } else if (err[0]) {
+	// 	message = err[0].msg;
+	// 	statusCode = 400;
+	// } else if (err.message) {
+	// 	message = err.message;
+	// 	statusCode = 400;
+	// } else {
+	// 	message = err;
+	// 	statusCode = 400;
+	// }
+	// return res.status(statusCode).json({ message });
 });
 
 const port = process.env.PORT || 3000;

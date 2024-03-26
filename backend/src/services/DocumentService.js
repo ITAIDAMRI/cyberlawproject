@@ -27,6 +27,19 @@ const DocumentService = {
 		}
 	},
 
+	fetchDocumentList: async (req, res) => {
+		try {
+			const result = await DocumentModel.find({
+				author: req.query.email,
+			});
+			return {
+				success: true,
+				data: result,
+			};
+		} catch (err) {
+			throw err;
+		}
+	},
 	// save document to the database if a document with the same name already exists it will overide it
 	// saveDocument: async (req, res) => {
 	// 	try {

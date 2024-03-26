@@ -1,12 +1,15 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 import { Card, Container, Button, Dropdown, Alert} from "react-bootstrap";
 import { Toolbar, Inject, WordExport, DocumentEditorContainerComponent } from '@syncfusion/ej2-react-documenteditor';
+import { MainContext } from "../../context/mainContext";
 
 const TextEditor = () => {
   const [DocsList, setDocsList] = useState([]);
   const [selectedDocument, setSelectedDocument] = useState('');
   const [titleInput, setTitleInput] = useState('');
   const [error, setError] = useState('');
+
+  const {user} = useContext(MainContext)
 
   const mainContainerStyle = {
     all: "unset",
@@ -21,26 +24,26 @@ const TextEditor = () => {
   const documentContainerRef = useRef(null);
 
   useEffect(() => {
-    async function fetchDocs() {
-      try {
-        const response = await fetch('http://localhost:5000/api/documents/fetchDocsList', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const responseData = await response.json();
-        if (Array.isArray(responseData.docs)) {
-          const responseData = await response.json();
-          setDocsList.setUserAuthoredDocuments(responseData.docs); // Set the fetched document titles
-        } else {
-          console.error('Response data is not an array:', responseData);
-        }
-      } catch (error) {
-        console.error('Fetching of docs failed:', error.message);
-      }
-    }
-    fetchDocs();
+    // async function fetchDocs() {
+    //   try {
+    //     const response = await fetch('http://localhost:5000/api/documents/fetchDocsList', {
+    //       method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     });
+    //     const responseData = await response.json();
+    //     if (Array.isArray(responseData.docs)) {
+    //       const responseData = await response.json();
+    //       setDocsList.setUserAuthoredDocuments(responseData.docs); // Set the fetched document titles
+    //     } else {
+    //       console.error('Response data is not an array:', responseData);
+    //     }
+    //   } catch (error) {
+    //     console.error('Fetching of docs failed:', error.message);
+    //   }
+    // }
+    // fetchDocs();
   }, []);
   
 
@@ -79,7 +82,7 @@ const TextEditor = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ Data: documentData, title: "NEW TITLE", author:"Itai Damri" }),
+        body: JSON.stringify({ Data: documentData, title: "NEW TITLE", author: user.email }),
       });
       if (response.ok) {
         console.log('Document saved successfully!');
