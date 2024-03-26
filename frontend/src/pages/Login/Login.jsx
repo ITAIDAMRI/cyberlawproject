@@ -26,10 +26,14 @@ export default function Login() {
       <div className='loginPanel'>
         <h1>Login</h1>
         <div className='loginForm'>
-          <label>Email:</label>
+          <div className='loginFormField'>
+          <h4>Email:</h4>
           <input ref={emailRef} defaultValue={mockUser.email} type="email" />
-          <label>Password:</label>
+          </div>
+          <div className='loginFormField'>
+          <h4>Password:</h4>
           <input ref={passwordRef} defaultValue={mockUser.password} type="password" />
+          </div>
         </div>
         <button onClick={handleLogin} className='btn btn-primary btn-lg'>Login</button>
       </div>

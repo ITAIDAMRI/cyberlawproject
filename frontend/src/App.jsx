@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Documents from './pages/Documents';
 import EditorPage from './pages/Editor/editorPage';
 import { checkToken } from './api/auth';
+import Home from './pages/Home';
 function App() {
   const {user} = useContext(MainContext)
 
@@ -28,7 +29,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<h1>Home</h1>} />
+          <Route path="/" element={<Home />} />
           <Route path="/editor" element={<EditorPage />} />
           <Route path="/documents" element={<Documents/>} />
         </Routes>

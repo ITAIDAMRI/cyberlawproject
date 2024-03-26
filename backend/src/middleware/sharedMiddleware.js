@@ -18,7 +18,7 @@ const sharedMiddleware = {
 	},
 
 	logResponse: async (req, res, next) => {
-		logResponse(res.status);
+		logResponse(res);
 		return res;
 	},
 };

@@ -2,19 +2,20 @@ import React, { useRef, useEffect, useState, useContext } from "react";
 import { Card, Container, Button, Dropdown, Alert} from "react-bootstrap";
 import { Toolbar, Inject, WordExport, DocumentEditorContainerComponent } from '@syncfusion/ej2-react-documenteditor';
 import { MainContext } from "../../context/mainContext";
+import { createDocument } from "../../api/documents";
+import "./editorStyle.css"
 
-const TextEditor = () => {
+const TextEditor = ({refresh, document}) => {
   const [DocsList, setDocsList] = useState([]);
   const [selectedDocument, setSelectedDocument] = useState('');
   const [titleInput, setTitleInput] = useState('');
   const [error, setError] = useState('');
 
+  const documentTitleInput = useRef(null);
+
   const {user} = useContext(MainContext)
 
-  const mainContainerStyle = {
-    all: "unset",
-    height: "95%"
-  };
+
 
   const editorStyle = {
     width: "100%",
@@ -23,30 +24,7 @@ const TextEditor = () => {
 
   const documentContainerRef = useRef(null);
 
-  useEffect(() => {
-    // async function fetchDocs() {
-    //   try {
-    //     const response = await fetch('http://localhost:5000/api/documents/fetchDocsList', {
-    //       method: 'GET',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //     });
-    //     const responseData = await response.json();
-    //     if (Array.isArray(responseData.docs)) {
-    //       const responseData = await response.json();
-    //       setDocsList.setUserAuthoredDocuments(responseData.docs); // Set the fetched document titles
-    //     } else {
-    //       console.error('Response data is not an array:', responseData);
-    //     }
-    //   } catch (error) {
-    //     console.error('Fetching of docs failed:', error.message);
-    //   }
-    // }
-    // fetchDocs();
-  }, []);
   
-
   const saveAsDocx = async () => {
     if (!titleInput) {
       console.error('Title cannot be empty')
@@ -74,26 +52,19 @@ const TextEditor = () => {
   };
   
 
-  const createDocument = async () => {
+  const handleCreateDocument = async () => {
     const documentData = documentContainerRef.current.documentEditor.serialize();
-    try {
-      const response = await fetch('http://localhost:5000/documents/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ Data: documentData, title: "NEW TITLE", author: user.email }),
-      });
-      if (response.ok) {
-        console.log('Document saved successfully!');
-      } else {
-        console.error('Failed to save document:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error saving document:', error);
-    }
+    const documentTitle = documentTitleInput.current.value || "UNTITLED";
+    const result = await createDocument(documentTitle, documentData, user)
+    if(result.status === 200) refresh()
   }
 
+  useEffect(() => {
+    if(document){
+      documentContainerRef.current.documentEditor.open(document.text)
+      documentTitleInput.current.value = document.title
+    }
+  }, [document])
 
   const fetchDocument = async () => {
     if (!selectedDocument) {
@@ -122,41 +93,35 @@ const TextEditor = () => {
     }
   };
 
-  const handleTitleChange = (event) => {
-    setTitleInput(event.target.value);
-  };
+  // const handleTitleChange = (event) => {
+  //   setTitleInput(event.target.value);
+  // };
 
 
   
   return (
-    <Container style={mainContainerStyle} className="d-flex justify-content-center align-items-center">
-      <Card style={{ height: "100vh", width: "100%" }} bg="primary" text="black">
-        <Card.Body>
-          <button onClick={createDocument} >Create</button>
-         
-          {error && <Alert variant="danger"  style={{width: '95%'}}>{error}</Alert>}
-          <div className="d-flex justify-content-center align-items-center">
-            <Dropdown onSelect={(eventKey) => setSelectedDocument(eventKey)} className="mr-2"  style={{marginTop: '10px'}}>
-              <Dropdown.Toggle variant="primary" id="documentDropdown">
-                {selectedDocument ? selectedDocument : "Select Document"}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {DocsList.map((docTitle, index) => (
-                  <Dropdown.Item key={index} eventKey={docTitle}>{docTitle}</Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-            <input type="text" placeholder="Enter title" value={titleInput} onChange={handleTitleChange}  style={{marginLeft: '10px'}}/>
-          </div>
-          <p/>
-          <Button onClick={saveAsDocx} style={{marginRight: '10px'}}>Save</Button>
-          <Button onClick={fetchDocument}>Fetch</Button>
-          <DocumentEditorContainerComponent height="82vh" width="95%" id="container" style={editorStyle} ref={documentContainerRef}>
-            <Inject services={[Toolbar, WordExport]} />
-          </DocumentEditorContainerComponent>
-        </Card.Body>
-      </Card>
-    </Container>
+    <div className="mainEditorContainer">
+      <div className="editorToolbar">
+      <div className="editorTitleContainer">
+        <h3 className="text-light">Document Title:</h3>
+        <input type="text" placeholder="Enter title" ref={documentTitleInput}/>
+      </div>
+        <Button className="bg-dark" onClick={handleCreateDocument} >Save to Database</Button>
+        <Button className="bg-dark" onClick={saveAsDocx} style={{marginRight: '10px'}}>Save as Docx</Button>
+        
+      </div>
+      
+      <div className="editorWindowContainer">
+      <DocumentEditorContainerComponent 
+        height="80svh" 
+        width="80svw"
+        ref={documentContainerRef}>
+        <Inject services={[Toolbar, WordExport]} />
+      </DocumentEditorContainerComponent>
+      </div>
+
+  
+    </div>
   );
 };
 

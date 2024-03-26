@@ -3,11 +3,11 @@ const { DocumentModel } = require("../model/DocumentModel");
 const DocumentService = {
 	createDocument: async (req, res) => {
 		try {
-			const { Data, title, author } = req.body;
+			const { Data, title } = req.body;
 			const result = new DocumentModel({
 				title,
 				text: Data,
-				author,
+				author: req.query.user,
 			});
 			await result.save();
 
@@ -30,7 +30,7 @@ const DocumentService = {
 	fetchDocumentList: async (req, res) => {
 		try {
 			const result = await DocumentModel.find({
-				author: req.query.email,
+				author: req.query.user,
 			});
 			return {
 				success: true,

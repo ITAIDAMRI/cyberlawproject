@@ -5,15 +5,9 @@ const documentMiddleware = {
 		try {
 			const result = await DocumentService.createDocument(req, res);
 			if (result.success) {
-				res = {
-					status: 200,
-					json: result.message,
-				};
+				return res.status(200).json(result.message);
 			} else {
-				res = {
-					status: 400,
-					json: result.message,
-				};
+				return res.status(400).json(result.message);
 			}
 			next();
 		} catch (err) {
@@ -24,17 +18,10 @@ const documentMiddleware = {
 	fetchDocumentList: async (req, res, next) => {
 		try {
 			const result = await DocumentService.fetchDocumentList(req, res);
-			console.log("result", result);
 			if (result.success) {
-				res = {
-					status: 200,
-					json: result.data,
-				};
+				return res.status(200).json(result);
 			} else {
-				res = {
-					status: 400,
-					json: result.message,
-				};
+				return res.status(400).json(result.message);
 			}
 			next();
 		} catch (err) {

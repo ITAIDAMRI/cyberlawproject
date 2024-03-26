@@ -1,0 +1,26 @@
+.mainEditorContainer {
+	border: 1px solid black;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 1rem;
+	gap: 1rem;
+	align-items: center;
+}
+
+.editorToolbar {
+	display: flex;
+	width: 100%;
+	gap: 1rem;
+}
+
+.editorTitleContainer {
+	display: flex;
+	padding-left: 1rem;
+	gap: 2rem;
+}
+
+.editorTitleContainer input {
+	width: 50rem;
+}
