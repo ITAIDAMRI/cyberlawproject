@@ -24,7 +24,6 @@
 .homePanelContentContainer {
 	height: 100%;
 	width: 100%;
-	border: 1px solid black;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-gap: 1rem 1rem;
