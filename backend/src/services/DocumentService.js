@@ -2,11 +2,14 @@ const { DocumentModel } = require("../model/DocumentModel");
 
 const DocumentService = {
 	createDocument: async (req, res) => {
+		
 		try {
-			const { Data, title } = req.body;
+			const { Data, title,finalDate } = req.body;
 			const result = new DocumentModel({
+				
 				title,
 				text: Data,
+				finalDate: finalDate,
 				author: req.query.user,
 			});
 			await result.save();

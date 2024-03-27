@@ -16,13 +16,14 @@ export const getUserDocuments = async (user) => {
 	return res.data;
 };
 
-export const createDocument = async (title, documentData, user) => {
+export const createDocument = async (title, documentData, user, finalDate) => {
 	try {
 		const result = await axios.post(
 			SERVER_URL + BASE_URL,
 			{
 				title,
 				Data: documentData,
+				finalDate,
 			},
 			{
 				headers: {
@@ -39,22 +40,5 @@ export const createDocument = async (title, documentData, user) => {
 	}
 };
 
-// const createDocument = async () => {
-//     const documentData = documentContainerRef.current.documentEditor.serialize();
-//     try {
-//       const response = await fetch('http://localhost:5000/api/documents/', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ Data: documentData, title: titleInput }),
-//       });
-//       if (response.ok) {
-//         console.log('Document saved successfully!');
-//       } else {
-//         console.error('Failed to save document:', response.statusText);
-//       }
-//     } catch (error) {
-//       console.error('Error saving document:', error);
-//     }
-// }
+
+

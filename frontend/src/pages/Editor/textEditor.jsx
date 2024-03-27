@@ -6,17 +6,16 @@ import { MainContext } from "../../context/mainContext";
 import { createDocument } from "../../api/documents";
 import "./editorStyle.css"
 
-const TextEditor = ({refresh, document}) => {
+const TextEditor = ({ refresh, document }) => {
   const [DocsList, setDocsList] = useState([]);
-  const [selectedDocument, setSelectedDocument] = useState('');
-  const [titleInput, setTitleInput] = useState('');
-  const [error, setError] = useState('');
+  const [selectedDocument, setSelectedDocument] = useState("");
+  const [titleInput, setTitleInput] = useState("");
+  const [finalDateInput, setFinalDateInput] = useState(""); 
+  const [error, setError] = useState("");
 
   const documentTitleInput = useRef(null);
-
-  const {user} = useContext(MainContext)
-
-
+  const documentFinalDateInput = useRef(null);
+  const { user } = useContext(MainContext);
 
   const editorStyle = {
     width: "100%",
@@ -75,17 +74,22 @@ const pdfConverter = async (objRef) => {
   const handleCreateDocument = async () => {
     const documentData = documentContainerRef.current.documentEditor.serialize();
     const documentTitle = documentTitleInput.current.value || "UNTITLED";
-    const result = await createDocument(documentTitle, documentData, user)
+    const documentFinalDate = finalDateInput; // Get final date from state
+    const result = await createDocument(documentTitle, documentData, user, documentFinalDate)
     if(result.status === 200) refresh()
   }
-
-  useEffect(() => {
-    if(document){
-      documentContainerRef.current.documentEditor.open(document.text)
-      documentTitleInput.current.value = document.title
-    }
-  }, [document])
-
+  
+    useEffect(() => {
+      if (document) {
+        if (documentTitleInput.current) {
+          documentTitleInput.current.value = document.title;
+        }
+        if (documentFinalDateInput.current) {
+          documentFinalDateInput.current.value = document.finalDate;
+        }
+        documentContainerRef.current.documentEditor.open(document.text);
+      } 
+    }, [document]);
   const fetchDocument = async () => {
     if (!selectedDocument) {
       console.error('No document selected')
@@ -94,7 +98,7 @@ const pdfConverter = async (objRef) => {
     } else setError(null)
 
     try {
-      const response = await fetch('http://localhost:5000/documents/fetchDocument', {
+      const response = await fetch('http://localhost:5000/documents/api/fetchDocument', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,28 +123,34 @@ const pdfConverter = async (objRef) => {
 
 
   
-  return (
+ return (
     <div className="mainEditorContainer">
       <div className="editorToolbar">
-      <div className="editorTitleContainer">
-        <h3 className="text-light">Document Title:</h3>
-        <input type="text" placeholder="Enter title" ref={documentTitleInput}/>
-      </div>
-        <Button className="bg-dark" onClick={handleCreateDocument} >Save to Database</Button>
-        <Button className="bg-dark" onClick={saveAsDocx} style={{marginRight: '10px'}}>Save as PDF</Button>
-        
-      </div>
-      
-      <div className="editorWindowContainer">
-      <DocumentEditorContainerComponent 
-        height="80svh" 
-        width="80svw"
-        ref={documentContainerRef}>
-        <Inject services={[Toolbar, WordExport]} />
-      </DocumentEditorContainerComponent>
+        <div className="editorTitleContainer">
+          <h3 className="text-light">Document Title:</h3>
+          <input type="text" placeholder="Enter title" ref={documentTitleInput} />
+        </div>
+        <div className="finalDateContainer">
+          <h3 className="text-light">Final Date:</h3>
+          <input
+             type="date"
+              value={finalDateInput}
+               onChange={(e) => setFinalDateInput(e.target.value)}
+          />
+        </div>
+        <Button className="bg-dark" onClick={handleCreateDocument}>
+          Save to Database
+        </Button>
+        <Button className="bg-dark" onClick={saveAsDocx} style={{ marginRight: "10px" }}>
+          Save as PDF
+        </Button>
       </div>
 
-  
+      <div className="editorWindowContainer">
+        <DocumentEditorContainerComponent height="80svh" width="80svw" ref={documentContainerRef}>
+          <Inject services={[Toolbar, WordExport]} />
+        </DocumentEditorContainerComponent>
+      </div>
     </div>
   );
 };
