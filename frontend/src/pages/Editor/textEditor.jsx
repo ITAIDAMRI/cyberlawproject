@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, useContext } from "react";
 import { Card, Container, Button, Dropdown, Alert} from "react-bootstrap";
 import { Toolbar, Inject, WordExport, DocumentEditorContainerComponent } from '@syncfusion/ej2-react-documenteditor';
+import { PdfPageSettings, PdfDocument, PdfPageOrientation, PdfBitmap, SizeF } from '@syncfusion/ej2-pdf-export';
 import { MainContext } from "../../context/mainContext";
 import { createDocument } from "../../api/documents";
 import "./editorStyle.css"
@@ -24,28 +25,47 @@ const TextEditor = ({refresh, document}) => {
 
   const documentContainerRef = useRef(null);
 
-  
-  const saveAsDocx = async () => {
-    if (!titleInput) {
-      console.error('Title cannot be empty')
-      setError('Title cannot be empty')
-      return;
-    } else setError(null)
-
-    const documentData = documentContainerRef.current.documentEditor.serialize();
-    try {
-      const response = await fetch('http://localhost:5000/api/documents/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ Data: documentData, title: titleInput }),
+const pdfConverter = async (objRef) => {
+    const obj = objRef.current.documentEditor; 
+    if (!obj) {
+      throw new Error('Ref object is not initialized');
+    }
+    let pdfdocument = new PdfDocument();
+    let count = obj.pageCount;
+    obj.documentEditorSettings.printDevicePixelRatio = 2;
+    for (let i = 1; i <= count; i++) {
+      await new Promise((resolve, reject) => {
+        let format = 'image/jpeg';
+        let image = obj.exportAsImage(i, format);
+        image.onload = function () {
+          let imageHeight = parseInt(image.style.height.toString().replace('px', ''));
+          let imageWidth = parseInt(image.style.width.toString().replace('px', ''));
+          let section = pdfdocument.sections.add();
+          let settings = new PdfPageSettings(0);
+          if (imageWidth > imageHeight) {
+            settings.orientation = PdfPageOrientation.Landscape;
+          }
+          settings.size = new SizeF(imageWidth, imageHeight);
+          section.setPageSettings(settings);
+          let page = section.pages.add();
+          let graphics = page.graphics;
+          let imageStr = image.src.replace('data:image/jpeg;base64,', '');
+          let pdfImage = new PdfBitmap(imageStr);
+          graphics.drawImage(pdfImage, 0, 0, imageWidth, imageHeight);
+          resolve();
+        };
+        image.onerror = function (error) {
+          reject(error);
+        };
       });
-      if (response.ok) {
-        console.log('Document saved successfully!');
-      } else {
-        console.error('Failed to save document:', response.statusText);
-      }
+    }
+    pdfdocument.save((obj.documentName === '' ? 'sample' : obj.documentName) + '.pdf');
+  };
+  const saveAsDocx = async () => {
+
+    try {
+      pdfConverter(documentContainerRef);
+        
     } catch (error) {
       console.error('Error saving document:', error);
     }
