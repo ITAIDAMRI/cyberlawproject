@@ -13,23 +13,26 @@ export default function Documents() {
   const [editor, setEditor] = useState(<></>)
   
   const refreshUserDocuments = async () => {
-    const result = await getUserDocuments(user)
-    if(result.success){
-      setDocuments(result.data)
+    const result = await getUserDocuments(user);
+    if (result.success) {
+      setDocuments(result.data);
     }
-  }
+  };
   
   useEffect(() => {
     refreshUserDocuments()
   }, [])
   
   const handleChooseDocument = (document) => {
-    setEditor(<TextEditor document={document} refresh={refreshUserDocuments}/>)
-  }
+    setEditor(<TextEditor document={document} refresh={refreshUserDocuments} />);
+  };
 
-  const handleNewDocument = () => {
-    setEditor(<TextEditor />)
-  }
+const handleNewDocument = () => {
+  setEditor(<TextEditor refresh={refreshUserDocuments} />);
+}
+
+
+  
 
 
   const showDocuments = () => {

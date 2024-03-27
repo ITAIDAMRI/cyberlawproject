@@ -127,7 +127,7 @@ const pdfConverter = async (objRef) => {
         <input type="text" placeholder="Enter title" ref={documentTitleInput}/>
       </div>
         <Button className="bg-dark" onClick={handleCreateDocument} >Save to Database</Button>
-        <Button className="bg-dark" onClick={saveAsDocx} style={{marginRight: '10px'}}>Save as Docx</Button>
+        <Button className="bg-dark" onClick={saveAsDocx} style={{marginRight: '10px'}}>Save as PDF</Button>
         
       </div>
       

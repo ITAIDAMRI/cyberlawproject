@@ -25,7 +25,7 @@ export default function Navbar() {
     <div style={navStyle}>
         <div style={linkStyle}>
             <Link className="navbar-brand" to="/">Home</Link>
-            <Link className="navbar-brand" to="/documents">Documents</Link>
+            <Link className="navbar-brand" to="/documents">Tasks</Link>
         </div>
         <div>
             <button onClick={logout} className="btn btn-light">Logout</button>
