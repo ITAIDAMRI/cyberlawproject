@@ -58,7 +58,6 @@ export default function Documents() {
 			const dateDiff = new Date(b.finalDate) - new Date(a.finalDate);
 			let priorityDiff = b.priority - a.priority;
 			if (dateDiff === 0) {
-				// If dates are the same, sort by priority
 				priorityDiff = b.priority - a.priority;
 			}
 			return dateDiff || priorityDiff;
@@ -94,3 +93,36 @@ export default function Documents() {
 		</div>
 	);
 }
+
+
+const showDocuments = () => {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(); // This will return only the date portion
+  };
+
+  // Sort documents based on finalDate in ascending order
+  const sortedDocuments = documents.slice().sort((a, b) => new Date(a.finalDate) - new Date(b.finalDate));
+
+  return (
+    <div className="documentsList">
+      <div className="create_new" onClick={handleNewDocument}>➕ Create New</div>
+      {sortedDocuments.map((document) => {
+        return (
+          <div className="documentItem" key={document._id} onClick={() => handleChooseDocument(document)}>
+            {document.title} :  : {formatDate(document.finalDate)}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+  return (
+    <div className="documentsMainContainer">
+        {showDocuments()}
+          <div className="editorContainer">{editor}</div>
+    </div>
+  );
+}
+
