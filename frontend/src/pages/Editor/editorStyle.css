@@ -19,8 +19,28 @@
 	display: flex;
 	padding-left: 1rem;
 	gap: 2rem;
+	align-items: center;
+}
+
+.documentParametersContainer {
+	display: flex;
+	width: 100%;
+	gap: 3rem;
 }
 
 .editorTitleContainer input {
 	width: 50rem;
+	padding: 0.5rem;
+}
+
+.priorityContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+}
+
+.finalDateContainer {
+	display: flex;
+	gap: 1rem;
 }

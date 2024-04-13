@@ -16,7 +16,13 @@ export const getUserDocuments = async (user) => {
 	return res.data;
 };
 
-export const createDocument = async (title, documentData, user, finalDate) => {
+export const createDocument = async (
+	title,
+	documentData,
+	user,
+	finalDate,
+	priority
+) => {
 	try {
 		const result = await axios.post(
 			SERVER_URL + BASE_URL,
@@ -24,6 +30,7 @@ export const createDocument = async (title, documentData, user, finalDate) => {
 				title,
 				Data: documentData,
 				finalDate,
+				priority,
 			},
 			{
 				headers: {
@@ -39,6 +46,3 @@ export const createDocument = async (title, documentData, user, finalDate) => {
 		console.log(error);
 	}
 };
-
-
-
