@@ -35,10 +35,6 @@ const handleNewDocument = () => {
   setEditor(<TextEditor refresh={refreshUserDocuments} />);
 }
 
-
-  
-
-
 const showDocuments = () => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -61,7 +57,6 @@ const showDocuments = () => {
     </div>
   );
 }
-
 
   return (
     <div className="documentsMainContainer">
